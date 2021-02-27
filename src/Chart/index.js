@@ -10,14 +10,14 @@ const { width } = Dimensions.get('window')
 const HEIGHT = 300
 const CURSOR_SIZE = 16
 const CURSOR_BORDER_WIDTH = 2
-const maxValue = 100
 const TEXTINPUT_HEIGHT = 40
 const TEXTINPUT_WIDTH = 100
+console.log('width', width)
 
 const scaleX = scale.scaleTime()
     .domain([data[0].x, data[data.length - 1].x]).range([0, width])
 const scaleY = scale.scaleLinear()
-    .domain([0, maxValue]).range([HEIGHT, 0])
+    .domain([0, 100]).range([HEIGHT, 0])
 
 const line = shape.line()
     .x(d => scaleX(d.x))
@@ -32,8 +32,10 @@ export default function Chart() {
     const x = new Animated.Value(0)
     const cursorRef = useRef(null)
     const textInputRef = useRef(null)
+    console.log(pathLength/width)
+
     const moveCursor = value => {
-        const {x, y} = properties.getPointAtLength(value)
+        const {x, y} = properties.getPointAtLength(pathLength - value)
         cursorRef.current.setNativeProps({
             top: y - (CURSOR_SIZE + CURSOR_BORDER_WIDTH)/2,
             left: x - (CURSOR_SIZE + CURSOR_BORDER_WIDTH)/2
@@ -44,8 +46,8 @@ export default function Chart() {
     }
 
     const inputTranslateXAnimated = x.interpolate({
-        inputRange: [0, width],
-        outputRange: [0, width - TEXTINPUT_WIDTH],
+        inputRange: [TEXTINPUT_WIDTH/2, width - TEXTINPUT_WIDTH/2],
+        outputRange: [width - TEXTINPUT_WIDTH, 0],
         extrapolate: "clamp"
     })
 
@@ -53,7 +55,6 @@ export default function Chart() {
         x.addListener(({ value }) => {
             moveCursor(value)
         })
-        moveCursor(0)
     }, [])
 
     return (
@@ -80,7 +81,8 @@ export default function Chart() {
                 <Animated.ScrollView
                     style={{...StyleSheet.absoluteFill}}
                     contentContainerStyle={{
-                        width: pathLength * 2,
+                        width: pathLength * 1.7,
+                        // height: HEIGHT,
                     }}
                     horizontal
                     onScroll={Animated.event(
@@ -95,7 +97,7 @@ export default function Chart() {
                 <Animated.View style={[styles.textInput, {
                     transform: [{translateX: inputTranslateXAnimated}]
                 }]}>
-                    <TextInput ref={textInputRef} />
+                    <TextInput style={{color: 'white', textAlign: 'center'}} editable={false} ref={textInputRef} />
                 </Animated.View>
             </View>
         </SafeAreaView>
