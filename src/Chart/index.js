@@ -12,7 +12,6 @@ const CURSOR_SIZE = 16
 const CURSOR_BORDER_WIDTH = 2
 const TEXTINPUT_HEIGHT = 40
 const TEXTINPUT_WIDTH = 100
-console.log('width', width)
 
 const scaleX = scale.scaleTime()
     .domain([data[0].x, data[data.length - 1].x]).range([0, width])
@@ -22,7 +21,7 @@ const scaleY = scale.scaleLinear()
 const line = shape.line()
     .x(d => scaleX(d.x))
     .y(d => scaleY(d.y))
-    .curve(shape.curveBasis)(data)
+    .curve(shape.curveNatural)(data)
 
 const properties = pathProps.svgPathProperties(line)
 const pathLength = properties.getTotalLength()
@@ -32,7 +31,6 @@ export default function Chart() {
     const x = new Animated.Value(0)
     const cursorRef = useRef(null)
     const textInputRef = useRef(null)
-    console.log(pathLength/width)
 
     const moveCursor = value => {
         const {x, y} = properties.getPointAtLength(pathLength - value)
@@ -41,12 +39,12 @@ export default function Chart() {
             left: x - (CURSOR_SIZE + CURSOR_BORDER_WIDTH)/2
         })
         textInputRef.current.setNativeProps({
-            text: Math.floor(scaleY.invert(y)).toString()
+            text: Math.round(scaleY.invert(y)).toString()
         })
     }
 
     const inputTranslateXAnimated = x.interpolate({
-        inputRange: [TEXTINPUT_WIDTH/2, width - TEXTINPUT_WIDTH/2],
+        inputRange: [TEXTINPUT_WIDTH/2, pathLength - TEXTINPUT_WIDTH/2],
         outputRange: [width - TEXTINPUT_WIDTH, 0],
         extrapolate: "clamp"
     })
@@ -81,7 +79,7 @@ export default function Chart() {
                 <Animated.ScrollView
                     style={{...StyleSheet.absoluteFill}}
                     contentContainerStyle={{
-                        width: pathLength * 1.7,
+                        width: pathLength + width,
                         // height: HEIGHT,
                     }}
                     horizontal
@@ -91,7 +89,6 @@ export default function Chart() {
                     )}
                     scrollEventThrottle={16}
                     showsHorizontalScrollIndicator={false}
-                    inver
                 />
                 {/* label */}
                 <Animated.View style={[styles.textInput, {
