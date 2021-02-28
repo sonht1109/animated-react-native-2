@@ -4,14 +4,14 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import recentTrack from './recentTrack'
 
-export default function MiniPlayer() {
+export default function MiniPlayer({onGoUp}: any) {
     const {artist, name} = recentTrack
     return (
         <TouchableWithoutFeedback>
             <View style={styles.miniPlayer}>
                 <Icon name='heart-outline' size={24} color="white" />
                 <Text style={{color: "white"}}>{name} - {artist}</Text>
-                <Icon name='play-circle-outline' size={24} color="white" />
+                <Icon name='play-circle-outline' size={24} color="white" onPress={onGoUp} />
             </View>
         </TouchableWithoutFeedback>
     )

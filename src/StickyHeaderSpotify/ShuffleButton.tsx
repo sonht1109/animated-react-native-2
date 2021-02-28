@@ -11,7 +11,7 @@ export default function ShuffleButton() {
             style={styles.button}
         >
             <Text
-            style={{color: 'white', textAlign: 'center', fontWeight: 'bold', letterSpacing: 1, textTransform: 'uppercase'}}>
+            style={{color: 'white', textAlign: 'center', fontWeight: 'bold', letterSpacing: 1,}}>
                 Shuffle
             </Text>
         </TouchableOpacity>
