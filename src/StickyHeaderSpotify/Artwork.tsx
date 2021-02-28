@@ -1,13 +1,11 @@
 import React from 'react'
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import Animated, { Extrapolate, interpolate } from 'react-native-reanimated'
 import { BUTTON_HEIGHT, HEADER_DELTA, MAX_HEADER_HEIGHT } from './constants'
 
 interface ArtworkProps {
     y: Animated.Value<number>
 }
-
-const {height} = Dimensions.get('window')
 
 export default function Artwork({y} : ArtworkProps) {
 

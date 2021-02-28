@@ -5,6 +5,7 @@ import Animated, { interpolate } from 'react-native-reanimated'
 import { BUTTON_HEIGHT, MAX_HEADER_HEIGHT } from './constants'
 import songs from './songs'
 import { onScrollEvent } from 'react-native-redash/lib/module/v1';
+import { MINIMIZED_PLAYER_HEIGHT } from '../SpotifyBottomSheet'
 
 interface ListProps {
     y: Animated.Value<number>,
@@ -48,6 +49,7 @@ export default function List({ y, artist }: ListProps) {
             style={styles.container}
             scrollEventThrottle={16}
             onScroll={onScrollEvent({y})}
+            contentContainerStyle={{paddingBottom: MINIMIZED_PLAYER_HEIGHT}}
         >
             {/* header cover */}
             <Animated.View style={styles.cover}>
@@ -80,7 +82,7 @@ export default function List({ y, artist }: ListProps) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     track: {
         backgroundColor: "black",

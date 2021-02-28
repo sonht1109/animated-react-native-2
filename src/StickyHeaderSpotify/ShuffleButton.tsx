@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { BUTTON_HEIGHT } from './constants'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export default function ShuffleButton() {
     return (
