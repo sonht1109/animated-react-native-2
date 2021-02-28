@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import Animated from 'react-native-reanimated'
-import { MAX_HEADER_HEIGHT } from './constants'
+import Animated, { interpolate } from 'react-native-reanimated'
+import { BUTTON_HEIGHT, MAX_HEADER_HEIGHT } from './constants'
 import songs from './songs'
 import { onScrollEvent } from 'react-native-redash/lib/module/v1';
 
@@ -12,11 +12,6 @@ interface ListProps {
 }
 
 export default function List({ y, artist }: ListProps) {
-
-    const onScroll = Animated.event(
-        [{ nativeEvent: { contentOffset: { y } } }],
-        { useNativeDriver: true }
-    )
 
     const trackElement = (item: any, index: number) => {
         return (
@@ -38,6 +33,16 @@ export default function List({ y, artist }: ListProps) {
         )
     }
 
+    // const gradientHeight = interpolate(y, {
+    //     inputRange: [-MAX_HEADER_HEIGHT, 0],
+    //     outputRange: [0, MAX_HEADER_HEIGHT]
+    // })
+    
+    const artistOpacity = interpolate(y, {
+        inputRange: [-MAX_HEADER_HEIGHT/2, 0, MAX_HEADER_HEIGHT/2],
+        outputRange: [0, 1, 0]
+    })
+
     return (
         <Animated.ScrollView
             style={styles.container}
@@ -49,13 +54,13 @@ export default function List({ y, artist }: ListProps) {
                 {/* linear gradient */}
                 <Animated.View style={[styles.gradient]}>
                     <LinearGradient
-                        style={StyleSheet.absoluteFill}
+                        style={[StyleSheet.absoluteFill]}
                         start={{ x: 0, y: 0.3 }}
                         end={{ x: 0, y: 1 }}
-                        colors={['transparent', 'rgba(0, 0, 0, 0.3)', 'black']}
+                        colors={['transparent', 'rgba(0, 0, 0, 0.2)', 'black']}
                     />
                 </Animated.View>
-                <Animated.View style={[styles.artist]}>
+                <Animated.View style={[styles.artist, {opacity: artistOpacity}]}>
                     <Animated.Text style={{ color: "white", fontSize: 40, fontWeight: "bold", textAlign: "center" }}>
                         {artist}
                     </Animated.Text>
@@ -84,11 +89,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     cover: {
-        height: MAX_HEADER_HEIGHT,
+        height: MAX_HEADER_HEIGHT + BUTTON_HEIGHT,
     },
     gradient: {
         ...StyleSheet.absoluteFillObject,
-        // alignItems: "center"
     },
     artist: {
         ...StyleSheet.absoluteFillObject,

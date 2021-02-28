@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import Animated from 'react-native-reanimated'
-import { BUTTON_HEIGHT, MIN_HEADER_HEIGHT } from './constants';
+import Animated, { interpolate } from 'react-native-reanimated'
+import { BUTTON_HEIGHT, HEADER_DELTA, MIN_HEADER_HEIGHT } from './constants';
 
 interface HeaderProps{
     y: Animated.Value<number>,
@@ -9,10 +9,23 @@ interface HeaderProps{
 } 
 
 export default function Header({y, artist} : HeaderProps) {
+
+    const bgOpacity = interpolate(y, {
+        inputRange: [HEADER_DELTA - BUTTON_HEIGHT, HEADER_DELTA - BUTTON_HEIGHT/2],
+        outputRange: [0, 1]
+    })
+
+    const textOpacity = interpolate(y, {
+        inputRange: [HEADER_DELTA - 8, HEADER_DELTA],
+        outputRange: [0, 1]
+    })
+
     return (
-        <View style={styles.header}>
-            <Text style={styles.headerText}>{artist}</Text>
-        </View>
+        <Animated.View style={[styles.header, {opacity: bgOpacity}]}>
+            <Animated.Text style={[styles.headerText, {opacity: textOpacity}]}>
+                {artist}
+            </Animated.Text>
+        </Animated.View>
     )
 }
 
