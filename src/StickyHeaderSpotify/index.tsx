@@ -14,7 +14,7 @@ export default function StickyHeaderSpotify() {
     const buttonTranslateY = multiply((min(y, HEADER_DELTA)), -1)
     return (
         <View style={styles.container}>
-            {/* <StatusBar backgroundColor="transparent" /> */}
+            <StatusBar backgroundColor="transparent" translucent />
             <Artwork y={y} />
             <List y={y} artist={artist} />
             <Header y={y} artist={artist} />
