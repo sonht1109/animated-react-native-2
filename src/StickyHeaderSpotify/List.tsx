@@ -4,32 +4,33 @@ import LinearGradient from 'react-native-linear-gradient'
 import Animated from 'react-native-reanimated'
 import { MAX_HEADER_HEIGHT } from './constants'
 import songs from './songs'
+import { onScrollEvent } from 'react-native-redash/lib/module/v1';
 
 interface ListProps {
     y: Animated.Value<number>,
     artist: string
 }
 
-export default function List({y, artist} : ListProps) {
+export default function List({ y, artist }: ListProps) {
 
     const onScroll = Animated.event(
-        [{nativeEvent: {contentOffset: {y}}}],
-        {useNativeDriver: true}
+        [{ nativeEvent: { contentOffset: { y } } }],
+        { useNativeDriver: true }
     )
 
     const trackElement = (item: any, index: number) => {
-        return(
-            <View key={'track'+index} style={styles.track}>
-                <View style={{justifyContent: "center", marginRight: 20}}>
-                    <Text style={{color: 'white', fontSize: 20}}>
+        return (
+            <View key={'track' + index} style={styles.track}>
+                <View style={{ justifyContent: "center", marginRight: 20 }}>
+                    <Text style={{ color: 'white', fontSize: 20 }}>
                         {index + 1}
                     </Text>
                 </View>
                 <View>
-                    <Text style={{color: "white", fontSize: 18, lineHeight: 30}}>
+                    <Text style={{ color: "white", fontSize: 18, lineHeight: 30 }}>
                         {item.name}
                     </Text>
-                    <Text style={{color: "#aaa"}}>
+                    <Text style={{ color: "#aaa" }}>
                         {item.artists}
                     </Text>
                 </View>
@@ -39,33 +40,34 @@ export default function List({y, artist} : ListProps) {
 
     return (
         <Animated.ScrollView
-        style={styles.container}
-        scrollEventThrottle={16}
-        onScroll={onScroll}
+            style={styles.container}
+            scrollEventThrottle={16}
+            onScroll={onScrollEvent({y})}
         >
             {/* header cover */}
             <Animated.View style={styles.cover}>
                 {/* linear gradient */}
                 <Animated.View style={[styles.gradient]}>
                     <LinearGradient
-                        start={{x: 0, y: 0.3}}
-                        end={{x: 0, y: 1}}
-                        colors={['transparent', 'rgba(0, 0, 0, 0.2)', 'black']}
+                        style={StyleSheet.absoluteFill}
+                        start={{ x: 0, y: 0.3 }}
+                        end={{ x: 0, y: 1 }}
+                        colors={['transparent', 'rgba(0, 0, 0, 0.3)', 'black']}
                     />
                 </Animated.View>
                 <Animated.View style={[styles.artist]}>
-                    <Animated.Text style={{color: "white", fontSize: 40, fontWeight: "bold", textAlign: "center"}}>
+                    <Animated.Text style={{ color: "white", fontSize: 40, fontWeight: "bold", textAlign: "center" }}>
                         {artist}
                     </Animated.Text>
                 </Animated.View>
             </Animated.View>
             {/* list songs */}
             <View>
-            {
-                songs.map((item: any, index: number) => {
-                    return trackElement(item, index)
-                })
-            }
+                {
+                    songs.map((item: any, index: number) => {
+                        return trackElement(item, index)
+                    })
+                }
             </View>
         </Animated.ScrollView>
     )
@@ -78,7 +80,8 @@ const styles = StyleSheet.create({
     track: {
         backgroundColor: "black",
         flexDirection: 'row',
-        padding: 10
+        paddingVertical: 10,
+        paddingHorizontal: 20
     },
     cover: {
         height: MAX_HEADER_HEIGHT,
@@ -92,5 +95,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: "center",
         paddingHorizontal: 40
-    }
+    },
 })

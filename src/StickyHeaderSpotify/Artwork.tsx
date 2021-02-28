@@ -1,12 +1,28 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
+import Animated, { Extrapolate, interpolate } from 'react-native-reanimated'
 import { MAX_HEADER_HEIGHT } from './constants'
 
-export default function Artwork() {
+interface ArtworkProps {
+    y: Animated.Value<number>
+}
+
+const {height} = Dimensions.get('window')
+
+export default function Artwork({y} : ArtworkProps) {
+
+    const scale = interpolate(y, {
+        inputRange: [-height, 0],
+        outputRange: [6, 1],
+        extrapolate: Extrapolate.CLAMP
+    })
+
     return (
-        <View style={styles.artworkContainer}>
+        <Animated.View style={[styles.artworkContainer, {
+            transform: [{scale}]
+        }]}>
             <Image source={require('./artwork.png')} style={styles.artwork} />
-        </View>
+        </Animated.View>
     )
 }
 
