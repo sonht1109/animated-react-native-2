@@ -5,7 +5,10 @@ import Post from './Post';
 export default function PinchToZoom() {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
+      scrollEventThrottle={16}
+      pinchGestureEnabled={true}>
         <Post />
         <Post />
         <Post />
